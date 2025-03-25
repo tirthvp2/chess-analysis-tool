@@ -34,7 +34,9 @@ class ChessAnalyzer:
         """Get the best move suggested by Stockfish."""
         self.stockfish.set_fen_position(self.board.fen())
         best_move = self.stockfish.get_best_move()
-        return best_move
+        # board = chess.Board()
+        move = chess.Move.from_uci(best_move)
+        return self.board.san(move)
 
     def get_top_moves(self, num_moves=3):
         """Get the top N moves suggested by Stockfish."""
