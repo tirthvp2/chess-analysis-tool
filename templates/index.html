@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Powered Chess Analysis Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>AI-Powered Chess Analysis Tool</h1>
+    <form method="POST">
+        <label for="fen">Enter FEN Position:</label><br>
+        <textarea id="fen" name="fen" rows="2" cols="50">{{ fen }}</textarea><br>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if board_svg %}
+        <h2>Current Position</h2>
+        <div>{{ board_svg | safe }}</div>
+    {% endif %}
+
+    {% if analysis %}
+        <h2>Stockfish Analysis</h2>
+        {% if analysis.error %}
+            <p style="color: red;">Error: {{ analysis.error }}</p>
+        {% else %}
+            <p><strong>Evaluation:</strong> {{ analysis.evaluation }}</p>
+            <p><strong>Best Move:</strong> {{ analysis.best_move }}</p>
+            <p><strong>Top Moves:</strong></p>
+            <ul>
+                {% for move in analysis.top_moves %}
+                    <li>{{ move.Move }} (Score: {{ move.Centipawn }})</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+
+    {% if prediction %}
+        <h2>AI Prediction</h2>
+        <p><strong>Predicted Outcome:</strong>
+            {% if prediction.outcome == 1 %}
+                White Wins
+            {% elif prediction.outcome == 0 %}
+                Draw
+            {% else %}
+                Black Wins
+            {% endif %}
+        </p>
+        <p><strong>Probabilities:</strong></p>
+        <ul>
+            <li>White Wins: {{ prediction.probabilities['White Wins']|round(2) }}</li>
+            <li>Draw: {{ prediction.probabilities['Draw']|round(2) }}</li>
+            <li>Black Wins: {{ prediction.probabilities['Black Wins']|round(2) }}</li>
+        </ul>
+    {% endif %}
+</body>
+</html>

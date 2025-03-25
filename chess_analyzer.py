@@ -2,6 +2,7 @@ import chess
 import chess.engine
 from stockfish import Stockfish
 
+
 class ChessAnalyzer:
     def __init__(self, stockfish_path):
         # Initialize Stockfish with the path to the binary
