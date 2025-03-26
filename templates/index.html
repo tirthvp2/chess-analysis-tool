@@ -28,7 +28,7 @@
             <p><strong>Top Moves:</strong></p>
             <ul>
                 {% for move in analysis.top_moves %}
-                    <li>{{ move.Move }} (Score: {{ move.Centipawn }})</li>
+                    <li>{{ move.Move }} (Evaluation: {{ move.Evaluation }})</li>
                 {% endfor %}
             </ul>
         {% endif %}

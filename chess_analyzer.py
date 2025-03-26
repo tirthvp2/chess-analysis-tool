@@ -28,7 +28,13 @@ class ChessAnalyzer:
         """Get Stockfish's evaluation of the current position."""
         self.stockfish.set_fen_position(self.board.fen())
         evaluation = self.stockfish.get_evaluation()
-        return evaluation
+        # return evaluation
+        if evaluation["type"] == "cp":
+            evl = evaluation["value"] / 100
+            return evl
+        elif evaluation["type"] == "mate":
+            evl = "M" + str(abs(evaluation["value"]))
+            return evl
 
     def get_best_move(self):
         """Get the best move suggested by Stockfish."""
@@ -41,8 +47,21 @@ class ChessAnalyzer:
     def get_top_moves(self, num_moves=3):
         """Get the top N moves suggested by Stockfish."""
         self.stockfish.set_fen_position(self.board.fen())
+        tp_mov = []
         top_moves = self.stockfish.get_top_moves(num_moves)
-        return top_moves
+        for item in top_moves:
+            temp_dic = {'Move': 'ijk', 'Evaluation': 'ijk'}
+            move_1 = chess.Move.from_uci(item["Move"])
+            temp_dic["Move"] = self.board.san(move_1)
+            if item["Centipawn"] is None:
+                evl = "M" + str(abs(item["Mate"]))
+                temp_dic["Evaluation"] = evl
+            else:
+                evl = item["Centipawn"] / 100
+                temp_dic["Evaluation"] = str(evl)
+            tp_mov.append(temp_dic)
+
+        return tp_mov
 
     def analyze_game(self, pgn):
         """Analyze a full game given in PGN format."""
