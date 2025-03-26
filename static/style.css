@@ -1,29 +1,83 @@
+/* Dark Chess.com Theme */
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #212121; /* Dark gray background */
+    color: #B0BEC5; /* Light gray text for readability */
 }
 
+/* Headings */
 h1, h2 {
-    color: #333;
+    color: #FFFFFF; /* White for headings */
+}
+
+/* Form Elements */
+label {
+    color: #B0BEC5; /* Light gray for labels */
 }
 
 textarea {
     width: 100%;
     margin-bottom: 10px;
+    background-color: #424242; /* Darker gray for input fields */
+    color: #FFFFFF; /* White text in textarea */
+    border: 1px solid #616161; /* Subtle border */
+    padding: 5px;
+    font-family: Arial, sans-serif;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #0288D1; /* Chess.com blue accent on focus */
 }
 
 button {
     padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
+    background-color: #0288D1; /* Chess.com blue for buttons */
+    color: #FFFFFF; /* White text */
     border: none;
     cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #0277BD; /* Slightly darker blue on hover */
+}
+
+/* Chessboard Container */
+.chessboard-container {
+    background-color: #2E2E2E; /* Dark background for the chessboard area */
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+/* Style the SVG chessboard to match Chess.com's dark theme */
+.chessboard-container svg {
+    background-color: #2E2E2E; /* Match container background */
+}
+
+/* Dark squares (Chess.com uses a dark green) */
+.chessboard-container svg .square.dark {
+    fill: #78909C; /* Dark green-gray, similar to Chess.com */
+}
+
+/* Light squares (Chess.com uses a beige) */
+.chessboard-container svg .square.light {
+    fill: #ECEFF1; /* Light beige, similar to Chess.com */
+}
+
+/* Pieces */
+.chessboard-container svg .piece {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)); /* Subtle shadow for pieces */
+}
+
+/* Analysis and Prediction Sections */
+p {
+    margin: 5px 0;
 }
 
 ul {
@@ -33,4 +87,18 @@ ul {
 
 li {
     margin: 5px 0;
+    padding: 5px;
+    background-color: #2E2E2E; /* Dark background for list items */
+    border-radius: 4px;
+}
+
+/* Error Messages */
+.error {
+    color: #EF5350; /* Red for errors, with a Chess.com-inspired tone */
+    font-weight: bold;
+}
+
+/* Highlight strong text (e.g., "Evaluation", "Best Move") */
+strong {
+    color: #FFFFFF; /* White for emphasis */
 }
