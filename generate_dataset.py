@@ -4,6 +4,7 @@ import chess.pgn
 import numpy as np
 import pandas as pd
 from stockfish import Stockfish
+from tqdm import tqdm  # Import tqdm for the loading bar
 
 
 def board_to_matrix(board):
@@ -38,7 +39,7 @@ def board_to_matrix(board):
     return board3d
 
 
-def generate_dataset(pgn_file, stockfish_path, num_games=1000):
+def generate_dataset(pgn_file, stockfish_path, num_games=10000):
     stockfish = Stockfish(path=stockfish_path)
     stockfish.set_depth(10)  # Faster evaluation
 
@@ -46,7 +47,13 @@ def generate_dataset(pgn_file, stockfish_path, num_games=1000):
     outcomes = []  # 1: White wins, 0: Draw, -1: Black wins
 
     with open(pgn_file, 'r', encoding='utf-8') as f:
-        for _ in range(num_games):
+        # for _ in range(num_games):
+        #     game = chess.pgn.read_game(f)
+        #     if game is None:
+        #         break
+
+        # Use tqdm to create a progress bar for the loop
+        for _ in tqdm(range(num_games), desc="Processing games", unit="game"):
             game = chess.pgn.read_game(f)
             if game is None:
                 break
@@ -64,6 +71,7 @@ def generate_dataset(pgn_file, stockfish_path, num_games=1000):
 
             # Play through the game and collect positions
             board = game.board()
+            game_positions = 0  # Track positions collected from this game
             for move in game.mainline_moves():
                 board.push(move)
                 # Use Stockfish to evaluate the position
@@ -81,15 +89,19 @@ def generate_dataset(pgn_file, stockfish_path, num_games=1000):
                 matrix = board_to_matrix(board)
                 positions.append(matrix.flatten())  # Flatten for the neural network
                 outcomes.append(outcome)
+                game_positions += 1
+            # # Print the number of positions collected after each game
+            # print(f"Positions collected from game {_ + 1}: {game_positions} (Total: {len(positions)})")
 
     # Save to a CSV file
     df = pd.DataFrame(positions)
     df["outcome"] = outcomes
     df.to_csv("data/chess_dataset.csv", index=False)
-    print(f"Generated dataset with {len(positions)} positions.")
+    print(f"\nDataset generation complete! Generated dataset with {len(positions)} positions.")
+    # print(f"Generated dataset with {len(positions)} positions.")
 
 
 if __name__ == "__main__":
     stockfish_path = r"D:/StockFish/stockfish/stockfish-windows-x86-64-avx2.exe"
     pgn_file = r"D:/Chess Analysis Tool/chess-analysis-tool/data/games.pgn"
-    generate_dataset(pgn_file, stockfish_path, num_games=1000)
+    generate_dataset(pgn_file, stockfish_path, num_games=10000)
